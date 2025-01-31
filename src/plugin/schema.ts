@@ -10,7 +10,7 @@ import {
 } from 'effect';
 import ts from 'typescript';
 import { ApiDevContext, type OnSchema } from '../adapter';
-import { Function, Module, Object, Typing } from '../compiler';
+import { Function, Module, Struct, Typing } from '../compiler';
 import type { Types } from '../override';
 
 export const schema: OnSchema = ({ name, schema }) =>
@@ -37,7 +37,7 @@ export const schema: OnSchema = ({ name, schema }) =>
 export const schemaNamespace = ts.factory.createIdentifier('Schema');
 export const responseNamespace = ts.factory.createIdentifier('Response');
 
-const number = Object.createPropertyAccess(schemaNamespace, 'Number');
+const number = Struct.createPropertyAccess(schemaNamespace, 'Number');
 
 const int = Effect.Do.pipe(
 	Effect.bind('number', () => number),
@@ -55,7 +55,7 @@ export const wrapOptional = (
 	value.pipe(
 		Array.of,
 		Array.append(
-			Object.createObject([
+			Struct.createObject([
 				Tuple.make('as', ts.factory.createStringLiteral('Option')),
 			]),
 		),
@@ -68,7 +68,7 @@ const generateRootInner = (
 ): Effect.Effect<ts.Expression, string, ApiDevContext.ApiDevContext> =>
 	Match.value(schema).pipe(
 		Match.when({ type: 'null' }, () =>
-			Object.createPropertyAccess(schemaNamespace, 'Null'),
+			Struct.createPropertyAccess(schemaNamespace, 'Null'),
 		),
 		Match.when({ type: 'boolean' }, (data) =>
 			pipe(
@@ -81,7 +81,7 @@ const generateRootInner = (
 							Array.of,
 							Function.createMethodCall(schemaNamespace, 'Literal'),
 						),
-					onNone: () => Object.createPropertyAccess(schemaNamespace, 'Boolean'),
+					onNone: () => Struct.createPropertyAccess(schemaNamespace, 'Boolean'),
 				}),
 			),
 		),
@@ -100,16 +100,16 @@ const generateRootInner = (
 					onNone: () =>
 						Match.value(data.format).pipe(
 							Match.when('date-time', () =>
-								Object.createPropertyAccess(schemaNamespace, 'DateFromString'),
+								Struct.createPropertyAccess(schemaNamespace, 'DateFromString'),
 							),
 							Match.when('date', () =>
-								Object.createPropertyAccess(schemaNamespace, 'DateFromString'),
+								Struct.createPropertyAccess(schemaNamespace, 'DateFromString'),
 							),
 							Match.when('uuid', () =>
-								Object.createPropertyAccess(schemaNamespace, 'UUID'),
+								Struct.createPropertyAccess(schemaNamespace, 'UUID'),
 							),
 							Match.orElse(() =>
-								Object.createPropertyAccess(schemaNamespace, 'String'),
+								Struct.createPropertyAccess(schemaNamespace, 'String'),
 							),
 						),
 				}),
@@ -154,16 +154,16 @@ const generateRootInner = (
 			),
 		),
 		Match.when({ type: 'never' }, () =>
-			Object.createPropertyAccess(schemaNamespace, 'Never'),
+			Struct.createPropertyAccess(schemaNamespace, 'Never'),
 		),
 		Match.when({ type: 'unknown' }, () =>
-			Object.createPropertyAccess(schemaNamespace, 'Unknown'),
+			Struct.createPropertyAccess(schemaNamespace, 'Unknown'),
 		),
 		Match.when({ type: 'undefined' }, () =>
-			Object.createPropertyAccess(schemaNamespace, 'Undefined'),
+			Struct.createPropertyAccess(schemaNamespace, 'Undefined'),
 		),
 		Match.when({ type: 'void' }, () =>
-			Object.createPropertyAccess(schemaNamespace, 'Void'),
+			Struct.createPropertyAccess(schemaNamespace, 'Void'),
 		),
 		Match.when({ type: 'enum' }, (data) =>
 			pipe(
@@ -215,7 +215,7 @@ const generateRootInner = (
 					),
 				),
 				Effect.andThen(Effect.all),
-				Effect.andThen(Object.createObject),
+				Effect.andThen(Struct.createObject),
 				Effect.map(Array.of),
 				Effect.andThen(Function.createMethodCall(schemaNamespace, 'Struct')),
 				Effect.catchTag('NoSuchElementException', () =>

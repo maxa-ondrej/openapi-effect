@@ -1,5 +1,6 @@
 import { Schema } from 'effect';
 
+export { paginate, createPaginator } from './pagination';
 export { parseSync } from './sync';
 export { parseStream } from './stream';
 

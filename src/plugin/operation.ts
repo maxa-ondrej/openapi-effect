@@ -12,7 +12,7 @@ import {
 } from 'effect';
 import ts from 'typescript';
 import { ApiDevContext, type OnOperation } from '../adapter';
-import { Function, Module, Object } from '../compiler';
+import { Function, Module, Struct } from '../compiler';
 import { MediaType } from '../lib';
 import { Comment, Naming } from '../override';
 import type { IROperationObject, IRPathItemObject } from '../override/types';
@@ -37,13 +37,13 @@ const generateParamSchema = (
 ): Effect.Effect<ts.Expression> =>
 	schemas.pipe(
 		Option.map(Record.toEntries),
-		Option.map(Object.createObject),
+		Option.map(Struct.createObject),
 		Option.map(Effect.map(Array.of)),
 		Option.map(
 			Effect.andThen(Function.createMethodCall(schemaNamespace, 'Struct')),
 		),
 		Option.getOrElse(() =>
-			Object.createPropertyAccess(schemaNamespace, 'Void'),
+			Struct.createPropertyAccess(schemaNamespace, 'Void'),
 		),
 	);
 
@@ -70,7 +70,7 @@ const createFetch =
 					Tuple.make('responseDecoder', response),
 				),
 			),
-			Effect.andThen(Object.createObject),
+			Effect.andThen(Struct.createObject),
 			Effect.map(Array.of),
 			Effect.andThen(
 				Function.createMethodCall(
@@ -107,7 +107,7 @@ const useFetch =
 				Tuple.make('method', ts.factory.createStringLiteral(method)),
 			),
 			Array.append(Tuple.make('url', ts.factory.createStringLiteral(url))),
-			Object.createObject,
+			Struct.createObject,
 			Effect.map(Array.of),
 			Effect.andThen(
 				Function.createFunctionCall(ts.factory.createIdentifier(fnName)),
@@ -295,6 +295,8 @@ const extractResponse = (operation: IROperationObject) =>
 
 export const operation: OnOperation = ({ operation, method, path }) =>
 	Effect.gen(function* () {
+		yield* Effect.logInfo(`> Processing operation ${operation.id}`);
+		yield* Effect.logDebug('Operation:', operation);
 		const knownMethod = yield* mapMethod(method);
 		const context = yield* ApiDevContext.ApiDevContext;
 		const tag = pipe(
@@ -340,4 +342,5 @@ export const operation: OnOperation = ({ operation, method, path }) =>
 			],
 		});
 		yield* context.addToNamespace(tag, node);
+		yield* Effect.logInfo(`< Finished processing operation ${operation.id}`);
 	});

@@ -1,6 +1,6 @@
 import { Effect } from 'effect';
 import ts from 'typescript';
-import { Object } from '.';
+import { Struct } from '.';
 
 export const createFunctionCall =
 	(method: ts.Expression) => (args: ts.Expression[]) =>
@@ -15,7 +15,7 @@ export const createFunctionCall =
 
 export const createMethodCall =
 	(parent: ts.Expression, method: string) => (args: ts.Expression[]) =>
-		Object.createPropertyAccess(parent, method).pipe(
+		Struct.createPropertyAccess(parent, method).pipe(
 			Effect.andThen(createFunctionCall),
 			Effect.andThen((fn) => fn(args)),
 		);

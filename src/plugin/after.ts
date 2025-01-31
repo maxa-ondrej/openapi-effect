@@ -1,7 +1,7 @@
 import { Array, Effect, Record, String, Tuple, pipe } from 'effect';
 import ts from 'typescript';
 import { ApiDevContext, type OnAfter } from '../adapter';
-import { Function, Module, Object } from '../compiler';
+import { Function, Module, Struct } from '../compiler';
 
 export const after: OnAfter = () =>
 	ApiDevContext.ApiDevContext.pipe(
@@ -28,7 +28,7 @@ const createAppLayer = () =>
 				(value) => Tuple.make('baseUrl', value),
 			),
 		),
-		Effect.bind('apiConfig', ({ baseUrl }) => Object.createObject([baseUrl])),
+		Effect.bind('apiConfig', ({ baseUrl }) => Struct.createObject([baseUrl])),
 		Effect.bind('apiLayer', ({ apiConfig }) =>
 			Function.createMethodCall(
 				ts.factory.createIdentifier('ApiConfig'),
@@ -36,13 +36,19 @@ const createAppLayer = () =>
 			)([apiConfig]),
 		),
 		Effect.bind('wrapperLayer', () =>
-			Object.createPropertyAccess(
+			Struct.createPropertyAccess(
 				ts.factory.createIdentifier('Wrapper'),
 				'WrapperLive',
 			),
 		),
-		Effect.map(({ apiLayer, wrapperLayer }) =>
-			Array.make(apiLayer, wrapperLayer),
+		Effect.bind('clientLayer', () =>
+			Struct.createPropertyAccess(
+				ts.factory.createIdentifier('FetchHttpClient'),
+				'layer',
+			),
+		),
+		Effect.map(({ apiLayer, wrapperLayer, clientLayer }) =>
+			Array.make(apiLayer, wrapperLayer, clientLayer),
 		),
 		Effect.andThen(
 			Function.createMethodCall(
