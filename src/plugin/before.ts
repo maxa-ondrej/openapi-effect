@@ -25,7 +25,7 @@ const createImports = () =>
 		Record.set('effect', Array.make('Effect', 'Schema', 'Layer')),
 		Record.set('@effect/platform', Array.make('FetchHttpClient')),
 		Record.set(
-			'@majksa/openapi-effect',
+			'@omaxa-csas/openapi-effect',
 			Array.make('Wrapper', 'ApiConfig', 'Request', 'Response'),
 		),
 		mapImports,
