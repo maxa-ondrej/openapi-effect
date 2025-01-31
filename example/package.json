@@ -1,0 +1,19 @@
+{
+	"name": "example",
+	"module": "index.ts",
+	"type": "module",
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	},
+	"dependencies": {
+		"@effect/platform": "^0.75.1",
+		"@effect/platform-bun": "^0.55.1",
+		"@hey-api/client-fetch": "^0.7.3",
+		"@hey-api/openapi-ts": "^0.63.2",
+		"@majksa/openapi-effect": "https://pkg.pr.new/maxa-ondrej/openapi-effect/@majksa/openapi-effect@75ba7bd",
+		"effect": "^3.12.7"
+	}
+}
