@@ -17,6 +17,8 @@ jobs:
         uses: ./.github/actions/setup
       - name: Build package
         run: pnpm build
+      - name: Setup git
+        run: git config --global user.email "info@example.com" && git config --global user.name "GitHub Actions"
       - name: Update version
         run: npm version ${{ github.event.release.tag_name }}
       - name: Publish package on NPM 📦
