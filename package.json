@@ -1,0 +1,60 @@
+{
+	"name": "@majksa/openapi-effect",
+	"version": "0.0.0",
+	"type": "module",
+	"packageManager": "pnpm@9.10.0",
+	"license": "MIT",
+	"description": "A basic Effect package",
+	"repository": {
+		"type": "git",
+		"url": "<PLACEHOLDER>"
+	},
+	"publishConfig": {
+		"access": "public",
+		"directory": "dist"
+	},
+	"scripts": {
+		"codegen": "build-utils prepare-v2",
+		"build": "pnpm build-esm && pnpm build-annotate && pnpm build-cjs && build-utils pack-v2",
+		"build-esm": "tsc -b tsconfig.build.json",
+		"build-cjs": "babel build/esm --plugins @babel/transform-export-namespace-from --plugins @babel/transform-modules-commonjs --plugins files --out-dir build/cjs --source-maps",
+		"check": "tsc -b tsconfig.json",
+		"test": "vitest",
+		"coverage": "vitest --coverage"
+	},
+	"dependencies": {
+		"@effect/platform": "0.75.1",
+		"@hey-api/openapi-ts": "0.62.3",
+		"effect": "3.12.7"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.26.4",
+		"@babel/core": "^7.26.7",
+		"@babel/plugin-transform-export-namespace-from": "7.25.9",
+		"@babel/plugin-transform-modules-commonjs": "7.26.3",
+		"@biomejs/biome": "1.9.4",
+		"@effect/build-utils": "^0.7.8",
+		"@effect/language-service": "0.2.0",
+		"@effect/platform-node": "0.71.1",
+		"@effect/schema": "0.75.5",
+		"@effect/vitest": "latest",
+		"@hey-api/client-fetch": "0.7.1",
+		"@types/node": "^22.12.0",
+		"babel-plugin-files": "1.0.0",
+		"tsx": "4.19.2",
+		"typescript": "5.7.3",
+		"vitest": "2.1.8"
+	},
+	"effect": {
+		"generateExports": {
+			"include": [
+				"**/*.ts"
+			]
+		},
+		"generateIndex": {
+			"include": [
+				"**/*.ts"
+			]
+		}
+	}
+}
