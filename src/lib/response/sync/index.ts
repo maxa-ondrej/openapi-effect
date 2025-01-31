@@ -6,6 +6,7 @@ export const parseSync = (response: HttpClientResponse.HttpClientResponse) =>
 	Match.value(MediaType.getType(response)).pipe(
 		Match.when(MediaType.MediaType.JSON, () => response.json),
 		Match.when(MediaType.MediaType.Text, () => response.text),
+		Match.when(MediaType.MediaType.Plain, () => response.json),
 		Match.either,
 		Either.match({
 			onRight: (decode) => decode,
