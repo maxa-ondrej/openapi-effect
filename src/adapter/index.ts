@@ -14,7 +14,6 @@ export const effectHandler =
 	({ context, plugin }) => {
 		const ctx = ApiDevContext.layer(context, plugin);
 		const logLevel = detectLogLevel(context.config.logs.level);
-		console.log(logLevel);
 		const appLayer = Layer.mergeAll(
 			Logger.pretty,
 			Logger.minimumLogLevel(logLevel),
