@@ -15,7 +15,7 @@
 	"module": "dist/openapi-effect.js",
 	"main": "dist/openapi-effect.cjs",
 	"types": "dist/dts/src/index.d.ts",
-	"files": ["build", "package.json", "README.md"],
+	"files": ["dist", "README.md"],
 	"scripts": {
 		"build": "vite build",
 		"check": "tsc -b tsconfig.json",
