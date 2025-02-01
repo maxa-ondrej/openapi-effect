@@ -12,6 +12,7 @@ import {
 	Layer,
 	Option,
 	type ParseResult,
+	type Record,
 	Ref,
 	Schema,
 	Stream,
@@ -94,6 +95,49 @@ export const extractCallableAndProvide =
 			Effect.provide(layers),
 		);
 
+const createPathFromTemplate = (
+	template: string,
+	params: Record.ReadonlyRecord<string, string>,
+) =>
+	pipe(template, (template) =>
+		template.replaceAll(/\{([^}]+)\}/g, (_, key) =>
+			key in params ? params[key] : `{${key}}`,
+		),
+	);
+
+if (import.meta.vitest) {
+	const { it, expect } = import.meta.vitest;
+	it('extract callable', () => {
+		expect(createPathFromTemplate('/hello', {})).toBe('/hello');
+		expect(
+			createPathFromTemplate('/hello/{abc}', {
+				abc: '123',
+			}),
+		).toBe('/hello/123');
+		expect(
+			createPathFromTemplate('/hello/{abc}/{def}', {
+				abc: '123',
+				def: '456',
+			}),
+		).toBe('/hello/123/456');
+		expect(
+			createPathFromTemplate('/hello/{abc}/{abc}', {
+				abc: '123',
+			}),
+		).toBe('/hello/123/123');
+		expect(
+			createPathFromTemplate('/hello/{abc}/{def}', {
+				abc: '123',
+			}),
+		).toBe('/hello/123/{def}');
+		expect(
+			createPathFromTemplate('/hello/{abc}', {
+				def: '123',
+			}),
+		).toBe('/hello/{abc}');
+	});
+}
+
 const executeRequest =
 	<Path, Query, Body, P, Q, Response, R>({
 		bodyEncoder,
@@ -105,6 +149,7 @@ const executeRequest =
 		HttpClient.HttpClient.pipe(
 			Effect.bindTo('client'),
 			Effect.bind('config', () => Config.pipe(Effect.andThen(Ref.get))),
+			Effect.tap(({ config }) => Effect.logDebug('⚙️ Api Config', config)),
 			Effect.bind('path', () =>
 				pipe(
 					Option.fromNullable('path' in data ? data.path : null),
