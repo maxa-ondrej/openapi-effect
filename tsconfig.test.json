@@ -3,7 +3,6 @@
   "include": ["src", "test", "tmp"],
   "references": [{ "path": "tsconfig.src.json" }],
   "compilerOptions": {
-    "types": ["node"],
     "tsBuildInfoFile": ".tsbuildinfo/test.tsbuildinfo",
     "noEmit": true
   }
