@@ -12,8 +12,8 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"module": "dist/esm/src/index.js",
-	"main": "dist/cjs/src/index.js",
+	"module": "dist/openapi-effect.js",
+	"main": "dist/openapi-effect.cjs",
 	"types": "dist/dts/src/index.d.ts",
 	"files": ["dist", "README.md"],
 	"scripts": {
