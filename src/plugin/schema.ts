@@ -53,6 +53,10 @@ export const wrapOptional = (
 	value: Effect.Effect<ts.Expression, string, ApiDevContext.ApiDevContext>,
 ) =>
 	value.pipe(
+		Effect.map(Array.of),
+		Effect.andThen(
+			Function.createMethodCall(schemaNamespace, 'OptionFromNullOr'),
+		),
 		Array.of,
 		Array.append(
 			Struct.createObject([
