@@ -15,7 +15,10 @@
 	"module": "dist/openapi-effect.js",
 	"main": "dist/openapi-effect.cjs",
 	"types": "dist/dts/src/index.d.ts",
-	"files": ["dist", "README.md"],
+	"files": [
+		"dist",
+		"README.md"
+	],
 	"scripts": {
 		"build": "vite build",
 		"check": "tsc -b tsconfig.json",
@@ -36,7 +39,6 @@
 		"@effect/vitest": "latest",
 		"@hey-api/client-fetch": "0.7.3",
 		"@types/node": "^22.12.0",
-		"glob": "11.0.1",
 		"tsx": "4.19.2",
 		"typescript": "5.7.3",
 		"vite": "6.0.11",
@@ -45,10 +47,14 @@
 	},
 	"effect": {
 		"generateExports": {
-			"include": ["**/*.ts"]
+			"include": [
+				"**/*.ts"
+			]
 		},
 		"generateIndex": {
-			"include": ["**/*.ts"]
+			"include": [
+				"**/*.ts"
+			]
 		}
 	}
 }

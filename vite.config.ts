@@ -1,6 +1,5 @@
-import path, { dirname, join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { globSync } from 'glob';
 import dts from 'vite-plugin-dts';
 import { defineConfig } from 'vitest/config';
 
@@ -17,27 +16,6 @@ export default defineConfig({
 		},
 		rollupOptions: {
 			external: ['effect', '@effect/platform', 'typescript'],
-			// input: Object.fromEntries(
-			// 	globSync('src/**/*.ts').map((file) => [
-			// 		path.relative(
-			// 			'src',
-			// 			file.slice(0, file.length - path.extname(file).length),
-			// 		),
-			// 		fileURLToPath(new URL(file, import.meta.url)),
-			// 	]),
-			// ),
-			// output: [
-			// 	{
-			// 		format: 'cjs',
-			// 		dir: 'dist/cjs',
-			// 		entryFileNames: 'src/[name].js',
-			// 	},
-			// 	{
-			// 		format: 'esm',
-			// 		dir: 'dist/esm',
-			// 		entryFileNames: 'src/[name].js',
-			// 	},
-			// ],
 		},
 	},
 	test: {
