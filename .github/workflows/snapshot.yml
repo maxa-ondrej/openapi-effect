@@ -20,4 +20,4 @@ jobs:
         run: pnpm build
       - name: Create snapshot
         id: snapshot
-        run: pnpx pkg-pr-new@0.0.24 publish --pnpm --comment=off
+        run: pnpx pkg-pr-new@0.0.24 publish --pnpm
