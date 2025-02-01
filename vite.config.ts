@@ -13,7 +13,7 @@ export default defineConfig({
 		sourcemap: true,
 		rollupOptions: {
 			treeshake: false,
-			external: (name) => name.includes('/node_modules/'),
+			// external: (name) => name.includes('/node_modules/'),
 			input: Object.fromEntries(
 				globSync('src/**/*.ts').map((file) => [
 					path.relative(
