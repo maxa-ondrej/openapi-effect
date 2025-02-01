@@ -12,8 +12,7 @@ export default defineConfig({
 		minify: false,
 		sourcemap: true,
 		rollupOptions: {
-			treeshake: false,
-			// external: (name) => name.includes('/node_modules/'),
+			external: ['effect', '@effect/platform', 'typescript'],
 			input: Object.fromEntries(
 				globSync('src/**/*.ts').map((file) => [
 					path.relative(
