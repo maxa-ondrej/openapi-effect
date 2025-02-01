@@ -15,6 +15,7 @@ export default {
 		Effect.defineConfig({
 			name: 'effect',
 			baseUrl: 'https://api.example.com',
+			provideLayers: false,
 		}),
 	],
 };
