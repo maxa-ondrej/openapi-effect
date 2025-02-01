@@ -78,6 +78,7 @@ export class Wrapper extends Context.Tag('ApiClientEffectWrapper')<
 >() {}
 
 export const extractCallable =
+	() =>
 	<I, T, E1, E2, R1, R2>(
 		effect: Effect.Effect<(arg: I) => Effect.Effect<T, E1, R1>, E2, R2>,
 	) =>
