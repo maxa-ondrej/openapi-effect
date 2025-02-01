@@ -74,9 +74,22 @@ export class Wrapper extends Context.Tag('ApiClientEffectWrapper')<
 >() {}
 
 export const extractCallable =
-	<I, R, E, C>(effect: Effect.Effect<(arg: I) => R, E, C>) =>
-	(data: I) =>
-		Effect.andThen(effect, (fetch) => fetch(data));
+	<I, T, E1, E2, R1, R2>(
+		effect: Effect.Effect<(arg: I) => Effect.Effect<T, E1, R1>, E2, R2>,
+	) =>
+	(data: I): Effect.Effect<T, E1 | E2, R1 | R2> =>
+		effect.pipe(Effect.andThen((fetch) => fetch(data)));
+
+export const extractCallableAndProvide =
+	<R>(layers: Layer.Layer<R>) =>
+	<I, T, E1, E2, R1 extends R, R2 extends R>(
+		effect: Effect.Effect<(arg: I) => Effect.Effect<T, E1, R1>, E2, R2>,
+	) =>
+	(data: I): Effect.Effect<T, E1 | E2> =>
+		effect.pipe(
+			Effect.andThen((fetch) => fetch(data)),
+			Effect.provide(layers),
+		);
 
 const executeRequest =
 	<Path, Query, Body, P, Q, Response, R>({
@@ -119,10 +132,11 @@ const executeRequest =
 					config.baseUrl +
 					base.url.replaceAll(/\{([^}]+\})/g, (_, key) => path[key]),
 			),
-			Effect.let('request', ({ url, query, body }) =>
+			Effect.let('request', ({ url, query, body, config }) =>
 				HttpClientRequest.make(base.method)(url).pipe(
 					HttpClientRequest.setBody(body),
 					HttpClientRequest.appendUrlParams(query),
+					HttpClientRequest.setHeaders(config.headers),
 				),
 			),
 			Effect.andThen(({ client, request }) => client.execute(request)),

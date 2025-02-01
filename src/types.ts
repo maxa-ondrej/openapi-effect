@@ -11,5 +11,10 @@ export interface Config {
 	/**
 	 * Base URL of the API.
 	 */
-	baseUrl: string;
+	baseUrl?: string;
+	/**
+	 * Should the effect layers be provided automatically.
+	 * @default true
+	 */
+	provideLayers?: boolean;
 }

@@ -39,7 +39,7 @@
     "removeComments": false,
     "plugins": [{ "name": "@effect/language-service" }],
     "paths": {
-      "@majksa/openapi-effect": ["src/index.ts"]
+      "@omaxa-csas/openapi-effect": ["src/index.ts"]
     }
   }
 }

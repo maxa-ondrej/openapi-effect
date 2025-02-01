@@ -13,6 +13,7 @@ import {
 import ts from 'typescript';
 import { ApiDevContext, type OnOperation } from '../adapter';
 import { Function, Module, Struct } from '../compiler';
+import { defaultConfig } from '../config';
 import { MediaType } from '../lib';
 import { Comment, Naming } from '../override';
 import type { IROperationObject, IRPathItemObject } from '../override/types';
@@ -145,11 +146,22 @@ const combineToOperation = (
 	createFetch: (wrapperName: string) => Effect.Effect<ts.Expression>,
 	useFetch: (fnName: string) => Effect.Effect<ts.Expression>,
 	id: string,
+	provideLayers: boolean,
 ) =>
 	Effect.Do.pipe(
 		Effect.bind('wrapper', () => effectMap('wrapper', createFetch)),
 		Effect.bind('fetch', () => effectMap('fetch', useFetch)),
-		Effect.map(({ wrapper, fetch }) =>
+		Effect.bind('extract', () =>
+			Function.createMethodCall(
+				ts.factory.createIdentifier('Wrapper'),
+				provideLayers ? 'extractCallableAndProvide' : 'extractCallable',
+			)(
+				provideLayers
+					? Array.of(ts.factory.createIdentifier('ClientLayer'))
+					: Array.empty(),
+			),
+		),
+		Effect.map(({ wrapper, fetch, extract }) =>
 			ts.factory.createCallExpression(
 				ts.factory.createIdentifier('Wrapper.Wrapper.pipe'),
 				undefined,
@@ -158,7 +170,7 @@ const combineToOperation = (
 					fetch,
 					ts.factory.createIdentifier(`Effect.withLogSpan('${id}')`),
 					ts.factory.createIdentifier(`Effect.withSpan('${id}')`),
-					ts.factory.createIdentifier('Wrapper.extractCallable'),
+					extract,
 				],
 			),
 		),
@@ -327,6 +339,7 @@ export const operation: OnOperation = ({ operation, method, path }) =>
 			createableFetch,
 			useableFetch,
 			fullId,
+			context.plugin.provideLayers ?? defaultConfig.provideLayers,
 		).pipe(Effect.andThen(Module.createConstExport(name)));
 
 		yield* Comment.addLeadingComments({
