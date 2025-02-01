@@ -175,11 +175,8 @@ const executeRequest =
 					Schema.encode(bodyEncoder),
 				),
 			),
-			Effect.let(
-				'url',
-				({ config, path }) =>
-					config.baseUrl +
-					base.url.replaceAll(/\{([^}]+\})/g, (_, key) => path[key]),
+			Effect.let('url', ({ config, path }) =>
+				createPathFromTemplate(config.baseUrl + base.url, path),
 			),
 			Effect.let('request', ({ url, query, body, config }) =>
 				HttpClientRequest.make(base.method)(url).pipe(
