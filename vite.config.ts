@@ -1,18 +1,40 @@
-import { dirname, join, resolve } from 'node:path';
+import path, { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { defineConfig } from 'vite';
+import { globSync } from 'glob';
 import dts from 'vite-plugin-dts';
+import { defineConfig } from 'vitest/config';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
 	plugins: [dts({ outDir: 'dist/dts', tsconfigPath: 'tsconfig.src.json' })],
 	build: {
-		outDir: 'dist',
-		lib: {
-			entry: resolve(__dirname, 'src/index.ts'),
-			formats: ['cjs', 'es'],
-			name: 'openapi-effect',
+		minify: false,
+		sourcemap: true,
+		rollupOptions: {
+			treeshake: false,
+			external: (name) => name.includes('/node_modules/'),
+			input: Object.fromEntries(
+				globSync('src/**/*.ts').map((file) => [
+					path.relative(
+						'src',
+						file.slice(0, file.length - path.extname(file).length),
+					),
+					fileURLToPath(new URL(file, import.meta.url)),
+				]),
+			),
+			output: [
+				{
+					format: 'cjs',
+					dir: 'dist/cjs',
+					entryFileNames: 'src/[name].js',
+				},
+				{
+					format: 'esm',
+					dir: 'dist/esm',
+					entryFileNames: 'src/[name].js',
+				},
+			],
 		},
 	},
 	test: {
