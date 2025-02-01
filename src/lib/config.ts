@@ -3,7 +3,7 @@ import { Context, Layer, Ref } from 'effect';
 
 export type ApiConfig = {
 	baseUrl: string;
-	headers: Headers.Headers;
+	headers: Headers.Input;
 };
 
 type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;

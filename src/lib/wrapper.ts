@@ -1,4 +1,5 @@
 import {
+	Headers,
 	type HttpBody,
 	HttpClient,
 	type HttpClientError,
@@ -27,9 +28,11 @@ type BaseData<P, Q, B> = {
 	(Q extends void ? { query: Q } : object) &
 	(B extends void ? { body: B } : object);
 
-type Data<P, Q, B> = (P extends void ? object : { path: P }) &
-	(Q extends void ? object : { query: Q }) &
-	(B extends void ? object : { body: B });
+type Data<P, Q, B> = {
+	readonly headers?: Headers.Input;
+} & (P extends void ? object : { readonly path: P }) &
+	(Q extends void ? object : { readonly query: Q }) &
+	(B extends void ? object : { readonly body: B });
 
 type Schemas<Path, Query, Body, P, Q, Response, R> = {
 	pathParamsEncoder: Schema.Schema<Path, P>;
@@ -136,7 +139,12 @@ const executeRequest =
 				HttpClientRequest.make(base.method)(url).pipe(
 					HttpClientRequest.setBody(body),
 					HttpClientRequest.appendUrlParams(query),
-					HttpClientRequest.setHeaders(config.headers),
+					HttpClientRequest.setHeaders(
+						Headers.merge(
+							Headers.fromInput(config.headers),
+							Headers.fromInput(data.headers),
+						),
+					),
 				),
 			),
 			Effect.andThen(({ client, request }) => client.execute(request)),
