@@ -3,7 +3,6 @@ import * as Effect from './src';
 
 export default {
 	...defineConfig({
-		client: '@hey-api/client-fetch',
 		experimentalParser: true,
 		input: './openapi.json',
 		output: {
