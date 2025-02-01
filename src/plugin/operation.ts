@@ -188,7 +188,7 @@ const extractParam = (
 		Option.andThen(
 			Record.map((object) =>
 				generateRoot(object.schema).pipe((node) =>
-					object.required ? node : wrapOptional(node),
+					object.required ? node : wrapOptional(node, false),
 				),
 			),
 		),

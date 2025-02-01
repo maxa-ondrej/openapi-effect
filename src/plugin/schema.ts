@@ -51,12 +51,17 @@ const int = Effect.Do.pipe(
 
 export const wrapOptional = (
 	value: Effect.Effect<ts.Expression, string, ApiDevContext.ApiDevContext>,
+	doubleWrap = true,
 ) =>
-	value.pipe(
-		Effect.map(Array.of),
-		Effect.andThen(
-			Function.createMethodCall(schemaNamespace, 'OptionFromNullOr'),
-		),
+	(doubleWrap
+		? value.pipe(
+				Effect.map(Array.of),
+				Effect.andThen(
+					Function.createMethodCall(schemaNamespace, 'OptionFromNullOr'),
+				),
+			)
+		: value
+	).pipe(
 		Array.of,
 		Array.append(
 			Struct.createObject([
