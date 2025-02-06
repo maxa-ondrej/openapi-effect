@@ -1,4 +1,4 @@
-import { Effect, Option, Stream, Tuple } from 'effect';
+import { Array, Effect, Option, Stream, Tuple } from 'effect';
 
 export type PaginationConfig<
 	D extends object,
@@ -37,7 +37,16 @@ export const paginate =
 	(limitValue: number = 10, initialPage: number = 0) =>
 	(
 		data: Omit<D, 'query'> & { query: Omit<D['query'], P | L> },
-	): Stream.Stream<readonly Item[], E1, R1> =>
+	): Stream.Stream<
+		readonly Readonly<{
+			item: Item;
+			page: number;
+			limit: number;
+			totalPages: number;
+		}>[],
+		E1,
+		R1
+	> =>
 		Stream.paginateEffect(initialPage, (n) =>
 			Effect.gen(function* () {
 				yield* Effect.logInfo('Paginate', { page, limit, firstPage });
@@ -52,7 +61,12 @@ export const paginate =
 				const response = yield* fetchPage(requestData);
 				const totalPages =
 					getTotalPages({ limit: limitValue, response }) - firstPage + 1;
-				const items = getPageData(response);
+				const items = Array.map(getPageData(response), (item) => ({
+					item,
+					page: n,
+					limit: limitValue,
+					totalPages,
+				}));
 
 				return Tuple.make(
 					items,
