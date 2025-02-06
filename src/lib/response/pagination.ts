@@ -127,7 +127,12 @@ export const createPaginator =
 			Response extends {
 				readonly page: readonly (infer T)[];
 			}
-				? readonly T[]
+				? readonly Readonly<{
+						item: T;
+						page: number;
+						limit: number;
+						totalPages: number;
+					}>[]
 				: never,
 			E1,
 			R1
