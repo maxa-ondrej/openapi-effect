@@ -1,4 +1,5 @@
 import type { HttpMethod } from '@effect/platform';
+import { MediaType } from '@omaxa-csas/openapi-effect-sdk';
 import {
 	Array,
 	Effect,
@@ -14,7 +15,6 @@ import ts from 'typescript';
 import { ApiDevContext, type OnOperation } from '../adapter';
 import { Function, Module, Struct } from '../compiler';
 import { defaultConfig } from '../config';
-import { MediaType } from '../lib';
 import { Comment, Naming } from '../override';
 import type { IROperationObject, IRPathItemObject } from '../override/types';
 import {

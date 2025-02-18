@@ -70,7 +70,7 @@ const createImports = () =>
 		Record.set('effect', Array.make('Effect', 'Schema', 'Layer')),
 		Record.set('@effect/platform', Array.make('FetchHttpClient')),
 		Record.set(
-			'@omaxa-csas/openapi-effect',
+			'@omaxa-csas/openapi-effect-sdk',
 			Array.make('Wrapper', 'ApiConfig', 'Request', 'Response'),
 		),
 		mapImports,

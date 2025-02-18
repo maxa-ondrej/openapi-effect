@@ -15,7 +15,12 @@ export default defineConfig({
 			formats: ['es', 'cjs'],
 		},
 		rollupOptions: {
-			external: ['effect', '@effect/platform', 'typescript'],
+			external: [
+				'effect',
+				'@effect/platform',
+				'typescript',
+				'@omaxa-csas/openapi-effect-sdk',
+			],
 		},
 	},
 	test: {

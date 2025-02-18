@@ -14,6 +14,9 @@ importers:
       '@hey-api/openapi-ts':
         specifier: 0.63.2
         version: 0.63.2(typescript@5.7.3)
+      '@omaxa-csas/openapi-effect-sdk':
+        specifier: 1.0.2
+        version: 1.0.2
       effect:
         specifier: 3.12.7
         version: 3.12.7
@@ -492,6 +495,9 @@ packages:
 
   '@microsoft/tsdoc@0.15.1':
     resolution: {integrity: sha512-4aErSrCR/On/e5G2hDP0wjooqDdauzEbIq8hIkIe5pXV0rtWJZvdCEKL0ykZxex+IxIwBp0eGeV48hQN07dXtw==}
+
+  '@omaxa-csas/openapi-effect-sdk@1.0.2':
+    resolution: {integrity: sha512-+fRThPfGPPNUtdrOXzdq0Y0cGks3oD7xxinqaDUpKkJWUvq8omCWtrq8Km/iJfkxlbHRy8unP8M0nfD8QPJOhQ==}
 
   '@parcel/watcher-android-arm64@2.5.1':
     resolution: {integrity: sha512-KF8+j9nNbUN8vzOFDpRMsaKBHZ/mcjEjMToVMJOhTozkDonQFFrRcfdLWn6yWKCmJKmdVxSgHiYvTCef4/qcBA==}
@@ -1689,6 +1695,11 @@ snapshots:
       resolve: 1.22.10
 
   '@microsoft/tsdoc@0.15.1': {}
+
+  '@omaxa-csas/openapi-effect-sdk@1.0.2':
+    dependencies:
+      '@effect/platform': 0.75.1(effect@3.12.7)
+      effect: 3.12.7
 
   '@parcel/watcher-android-arm64@2.5.1':
     optional: true

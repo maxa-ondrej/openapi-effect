@@ -15,10 +15,7 @@
 	"module": "dist/openapi-effect.js",
 	"main": "dist/openapi-effect.cjs",
 	"types": "dist/dts/src/index.d.ts",
-	"files": [
-		"dist",
-		"README.md"
-	],
+	"files": ["dist", "README.md"],
 	"scripts": {
 		"build": "vite build",
 		"check": "tsc -b tsconfig.json",
@@ -28,6 +25,7 @@
 	"dependencies": {
 		"@effect/platform": "0.75.1",
 		"@hey-api/openapi-ts": "0.63.2",
+		"@omaxa-csas/openapi-effect-sdk": "1.0.2",
 		"effect": "3.12.7"
 	},
 	"devDependencies": {
@@ -47,14 +45,10 @@
 	},
 	"effect": {
 		"generateExports": {
-			"include": [
-				"**/*.ts"
-			]
+			"include": ["**/*.ts"]
 		},
 		"generateIndex": {
-			"include": [
-				"**/*.ts"
-			]
+			"include": ["**/*.ts"]
 		}
 	}
 }
